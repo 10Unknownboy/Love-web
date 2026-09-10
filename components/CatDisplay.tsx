@@ -54,29 +54,29 @@ export const CAT_THRESHOLDS: Record<CatEmotionState, CatThresholdConfig> = {
   happy: {
     state: 'happy',
     min: 81,
-    max: 499.99,
+    max: 199.99,
     imageSrc: '/images/cat_happy.jpg',
     altText: 'Happy celebrating kitten with sparkling eyes',
     reactionText: 'love',
-    subText: 'So much pure love! Keep pulling past the limit!',
+    subText: 'So much pure love! Keep pulling to the limit!',
     badgeLabel: '81%',
     animationClass: 'animate-cute-bounce',
   },
   ecstatic: {
     state: 'ecstatic',
-    min: 500,
+    min: 200,
     max: Infinity,
     imageSrc: '/images/cat_ecstatic.jpg',
     altText: 'Ecstatic kitten hugging glowing red heart with LOVE',
     reactionText: 'Correct answer!',
-    subText: '100% was never enough — 500% LOVE unlocked!',
-    badgeLabel: '500% love',
+    subText: '200% LOVE unlocked!',
+    badgeLabel: '200% love',
     animationClass: 'animate-pulse-heart',
   },
 };
 
 export function getCatThresholdConfig(value: number): CatThresholdConfig {
-  if (value >= 500) return CAT_THRESHOLDS.ecstatic;
+  if (value >= 200) return CAT_THRESHOLDS.ecstatic;
   if (value >= 81) return CAT_THRESHOLDS.happy;
   if (value >= 55) return CAT_THRESHOLDS.confused;
   if (value >= 14) return CAT_THRESHOLDS.crying;
@@ -98,7 +98,7 @@ export function CatDisplay({
 }: CatDisplayProps) {
   const currentConfig = useMemo(() => getCatThresholdConfig(value), [value]);
   const isOverdrive = value > 100;
-  const isMaxUnlocked = value >= 500 || unlocked;
+  const isMaxUnlocked = value >= 200 || unlocked;
 
   return (
     <div
@@ -119,7 +119,7 @@ export function CatDisplay({
         />
       )}
 
-      {/* Floating heart particles at 500% */}
+      {/* Floating heart particles at 200% */}
       {isMaxUnlocked && (
         <div
           className="absolute inset-0 pointer-events-none overflow-hidden z-20"

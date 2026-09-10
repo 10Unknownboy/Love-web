@@ -33,7 +33,7 @@ export default function HomePage() {
   const handleSliderChange = useCallback(
     (val: number) => {
       setLoveValue(val);
-      if (val >= 500 && !isUnlocked) {
+      if (val >= 200 && !isUnlocked) {
         handleUnlock();
       }
     },
@@ -88,7 +88,7 @@ export default function HomePage() {
           How much do you love me?
         </h1>
         <p className="text-base sm:text-lg md:text-xl font-cursive text-[#8B264E]">
-          {loveValue >= 500
+          {loveValue >= 200
             ? 'You passed the love test! Claim your surprises! 🎉'
             : 'Drag the slider to test your love!'}
         </p>
@@ -106,7 +106,7 @@ export default function HomePage() {
           data-testid="percentage-badge"
         >
           <span>{loveValue}%</span>
-          {loveValue >= 500 && (
+          {loveValue >= 200 && (
             <span className="ml-2 text-xs sm:text-sm uppercase px-2.5 py-0.5 rounded-full bg-[#6B1A3A] text-white font-sans font-semibold animate-pulse">
               love
             </span>

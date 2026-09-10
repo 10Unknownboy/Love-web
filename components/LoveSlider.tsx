@@ -4,9 +4,9 @@ import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { Heart, Sparkles } from 'lucide-react';
 
 export interface SliderProps {
-  value: number; // 0 to 500
+  value: number; // 0 to 200
   onChange: (value: number) => void;
-  unlocked: boolean; // true when value >= 500
+  unlocked: boolean; // true when value >= 200
   onUnlock: () => void;
   className?: string;
   disabled?: boolean;
@@ -26,7 +26,7 @@ export function LoveSlider({
   const [isHovered, setIsHovered] = useState(false);
 
   // Constants for extended drag physics
-  // W_OVERDRIVE: Extra horizontal drag pixels needed past track end to scale from 100% to 500%
+  // W_OVERDRIVE: Extra horizontal drag pixels needed past track end to scale from 100% to 200%
   const W_OVERDRIVE = 160;
   // MAX_THUMB_OVERHANG: Maximum visual pixel breakout for thumb past track boundary
   const MAX_THUMB_OVERHANG = 64;
@@ -52,7 +52,7 @@ export function LoveSlider({
         return Math.round(ratio * 100);
       }
 
-      // Overdrive breakout zone: 101% to 500%
+      // Overdrive breakout zone: 101% to 200%
       const overdriveX = x - trackWidth;
       // On narrow screens, use the pixels still available before the viewport
       // edge so the full range remains reachable with a touch drag.
@@ -60,9 +60,9 @@ export function LoveSlider({
         typeof window !== 'undefined' ? Math.max(1, window.innerWidth - rect.right) : W_OVERDRIVE;
       const overdriveWidth = Math.min(W_OVERDRIVE, availableViewportWidth);
       const overdriveRatio = Math.min(1, overdriveX / overdriveWidth);
-      const computedValue = Math.round(100 + overdriveRatio * 400);
+      const computedValue = Math.round(100 + overdriveRatio * 100);
 
-      return Math.min(500, computedValue);
+      return Math.min(200, computedValue);
     },
     [value]
   );
@@ -88,7 +88,7 @@ export function LoveSlider({
       const newValue = calculateValueFromPointer(e.clientX);
       onChange(newValue);
 
-      if (newValue >= 500 && !unlocked) {
+      if (newValue >= 200 && !unlocked) {
         onUnlock();
       }
     },
@@ -102,7 +102,7 @@ export function LoveSlider({
       const newValue = calculateValueFromPointer(e.clientX);
       onChange(newValue);
 
-      if (newValue >= 500 && !unlocked) {
+      if (newValue >= 200 && !unlocked) {
         onUnlock();
       }
     },
@@ -172,7 +172,7 @@ export function LoveSlider({
           targetValue = 0;
           break;
         case 'End':
-          targetValue = 500;
+          targetValue = 200;
           break;
         default:
           return;
@@ -182,20 +182,20 @@ export function LoveSlider({
       const nextValue =
         targetValue !== null
           ? targetValue
-          : Math.max(0, Math.min(500, value + delta));
+          : Math.max(0, Math.min(200, value + delta));
 
       onChange(nextValue);
 
-      if (nextValue >= 500 && !unlocked) {
+      if (nextValue >= 200 && !unlocked) {
         onUnlock();
       }
     },
     [disabled, value, onChange, unlocked, onUnlock]
   );
 
-  // Sync unlock trigger whenever value reaches 500
+  // Sync unlock trigger whenever value reaches 200
   useEffect(() => {
-    if (value >= 500 && !unlocked) {
+    if (value >= 200 && !unlocked) {
       onUnlock();
     }
   }, [value, unlocked, onUnlock]);
@@ -205,7 +205,7 @@ export function LoveSlider({
 
   // Compute visual thumb position and overhang
   const isOverdrive = value > 100;
-  const overdriveRatio = isOverdrive ? Math.min(1, (value - 100) / 400) : 0;
+  const overdriveRatio = isOverdrive ? Math.min(1, (value - 100) / 100) : 0;
   const overhangPx = overdriveRatio * MAX_THUMB_OVERHANG;
 
   const thumbLeftStyle = isOverdrive
@@ -221,13 +221,13 @@ export function LoveSlider({
       <input
         type="range"
         min="0"
-        max="500"
+        max="200"
         value={value}
         disabled={disabled}
         onChange={(e) => {
           const val = Number(e.target.value);
           onChange(val);
-          if (val >= 500 && !unlocked) onUnlock();
+          if (val >= 200 && !unlocked) onUnlock();
         }}
         className="sr-only"
         data-testid="love-slider-input"
@@ -240,7 +240,7 @@ export function LoveSlider({
         ref={trackRef}
         role="slider"
         aria-valuemin={0}
-        aria-valuemax={500}
+        aria-valuemax={200}
         aria-valuenow={value}
         aria-label="How much do you love me?"
         tabIndex={disabled ? -1 : 0}
@@ -312,7 +312,7 @@ export function LoveSlider({
           className={`absolute top-1/2 flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full shadow-cute transition-transform duration-75 ${
             isDragging.current || isHovered ? 'scale-110' : 'scale-100'
           } ${
-            value >= 500
+            value >= 200
               ? 'bg-gradient-to-tr from-[#6B1A3A] to-[#EC4899] text-white ring-4 ring-[#F472B6]/50 animate-pulse'
               : isOverdrive
               ? 'bg-[#8B264E] text-white ring-2 ring-[#F472B6]/40'

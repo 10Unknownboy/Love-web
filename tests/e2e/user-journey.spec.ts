@@ -8,16 +8,17 @@ test.describe('Love Test User Journey', () => {
     // 2. Verify initial state
     await expect(page.locator('text=How much do you love me?')).toBeVisible();
     
-    // 3. Find the slider and drag it to 500%
+    // 3. Find the slider and drag it to 200%
     const slider = page.locator('input[type="range"]');
     await slider.evaluate((node) => {
-      node.value = "500";
+      const input = node as HTMLInputElement;
+      input.value = "200";
       node.dispatchEvent(new Event('input', { bubbles: true }));
       node.dispatchEvent(new Event('change', { bubbles: true }));
     });
 
-    // 4. Verify 500% state
-    await expect(page.locator('text=500%')).toBeVisible();
+    // 4. Verify 200% state
+    await expect(page.locator('text=200%')).toBeVisible();
     await expect(page.locator('text=Correct answer!')).toBeVisible();
 
     // 5. Click the Next button
