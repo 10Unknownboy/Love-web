@@ -54,7 +54,12 @@ export function LoveSlider({
 
       // Overdrive breakout zone: 101% to 500%
       const overdriveX = x - trackWidth;
-      const overdriveRatio = Math.min(1, overdriveX / W_OVERDRIVE);
+      // On narrow screens, use the pixels still available before the viewport
+      // edge so the full range remains reachable with a touch drag.
+      const availableViewportWidth =
+        typeof window !== 'undefined' ? Math.max(1, window.innerWidth - rect.right) : W_OVERDRIVE;
+      const overdriveWidth = Math.min(W_OVERDRIVE, availableViewportWidth);
+      const overdriveRatio = Math.min(1, overdriveX / overdriveWidth);
       const computedValue = Math.round(100 + overdriveRatio * 400);
 
       return Math.min(500, computedValue);
