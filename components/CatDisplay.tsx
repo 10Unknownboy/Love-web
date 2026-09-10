@@ -99,6 +99,7 @@ export function CatDisplay({
   const currentConfig = useMemo(() => getCatThresholdConfig(value), [value]);
   const isOverdrive = value > 100;
   const isMaxUnlocked = value >= 200 || unlocked;
+  const isUltimateSparkle = value >= 500;
 
   return (
     <div
@@ -143,6 +144,33 @@ export function CatDisplay({
             style={{ animationDelay: '0.3s' }}
           >
             ❤️
+          </span>
+        </div>
+      )}
+
+      {isUltimateSparkle && (
+        <div
+          className="absolute inset-0 pointer-events-none overflow-hidden z-30 animate-pulse"
+          aria-hidden="true"
+        >
+          <span className="absolute top-8 left-10 text-3xl animate-ping">✨</span>
+          <span
+            className="absolute top-12 right-8 text-2xl animate-spin"
+            style={{ animationDuration: '0.8s' }}
+          >
+            ✨
+          </span>
+          <span
+            className="absolute bottom-10 left-10 text-2xl animate-ping"
+            style={{ animationDelay: '0.2s' }}
+          >
+            💫
+          </span>
+          <span
+            className="absolute bottom-8 right-10 text-3xl animate-spin"
+            style={{ animationDuration: '0.7s', animationDelay: '0.15s' }}
+          >
+            ✨
           </span>
         </div>
       )}

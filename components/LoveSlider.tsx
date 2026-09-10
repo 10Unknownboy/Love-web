@@ -4,7 +4,7 @@ import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { Heart, Sparkles } from 'lucide-react';
 
 export interface SliderProps {
-  value: number; // 0 to 200
+  value: number; // 0 to 500
   onChange: (value: number) => void;
   unlocked: boolean; // true when value >= 200
   onUnlock: () => void;
@@ -26,7 +26,7 @@ export function LoveSlider({
   const [isHovered, setIsHovered] = useState(false);
 
   // Constants for extended drag physics
-  // W_OVERDRIVE: Extra horizontal drag pixels needed past track end to scale from 100% to 200%
+  // W_OVERDRIVE: Extra horizontal drag pixels needed past track end to scale from 100% to 500%
   const W_OVERDRIVE = 160;
   // MAX_THUMB_OVERHANG: Maximum visual pixel breakout for thumb past track boundary
   const MAX_THUMB_OVERHANG = 64;
@@ -52,7 +52,7 @@ export function LoveSlider({
         return Math.round(ratio * 100);
       }
 
-      // Overdrive breakout zone: 101% to 200%
+      // Overdrive breakout zone: 101% to 500%
       const overdriveX = x - trackWidth;
       // On narrow screens, use the pixels still available before the viewport
       // edge so the full range remains reachable with a touch drag.
@@ -60,9 +60,9 @@ export function LoveSlider({
         typeof window !== 'undefined' ? Math.max(1, window.innerWidth - rect.right) : W_OVERDRIVE;
       const overdriveWidth = Math.min(W_OVERDRIVE, availableViewportWidth);
       const overdriveRatio = Math.min(1, overdriveX / overdriveWidth);
-      const computedValue = Math.round(100 + overdriveRatio * 100);
+      const computedValue = Math.round(100 + overdriveRatio * 400);
 
-      return Math.min(200, computedValue);
+      return Math.min(500, computedValue);
     },
     [value]
   );
@@ -172,7 +172,7 @@ export function LoveSlider({
           targetValue = 0;
           break;
         case 'End':
-          targetValue = 200;
+          targetValue = 500;
           break;
         default:
           return;
@@ -182,7 +182,7 @@ export function LoveSlider({
       const nextValue =
         targetValue !== null
           ? targetValue
-          : Math.max(0, Math.min(200, value + delta));
+          : Math.max(0, Math.min(500, value + delta));
 
       onChange(nextValue);
 
@@ -205,7 +205,7 @@ export function LoveSlider({
 
   // Compute visual thumb position and overhang
   const isOverdrive = value > 100;
-  const overdriveRatio = isOverdrive ? Math.min(1, (value - 100) / 100) : 0;
+  const overdriveRatio = isOverdrive ? Math.min(1, (value - 100) / 400) : 0;
   const overhangPx = overdriveRatio * MAX_THUMB_OVERHANG;
 
   const thumbLeftStyle = isOverdrive
@@ -221,7 +221,7 @@ export function LoveSlider({
       <input
         type="range"
         min="0"
-        max="200"
+        max="500"
         value={value}
         disabled={disabled}
         onChange={(e) => {
@@ -240,7 +240,7 @@ export function LoveSlider({
         ref={trackRef}
         role="slider"
         aria-valuemin={0}
-        aria-valuemax={200}
+        aria-valuemax={500}
         aria-valuenow={value}
         aria-label="How much do you love me?"
         tabIndex={disabled ? -1 : 0}
@@ -320,7 +320,10 @@ export function LoveSlider({
           }`}
         >
           {value >= 500 ? (
-            <Sparkles className="w-4 h-4 animate-spin" style={{ animationDuration: '3s' }} />
+            <Sparkles
+              className={`w-4 h-4 animate-spin ${value >= 500 ? 'scale-125' : ''}`}
+              style={{ animationDuration: value >= 500 ? '0.7s' : '3s' }}
+            />
           ) : (
             <Heart
               className={`w-4 h-4 fill-current ${
