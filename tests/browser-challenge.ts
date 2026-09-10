@@ -1,4 +1,5 @@
 import { chromium, Browser, Page } from '@playwright/test';
+import { spawn, ChildProcess } from 'child_process';
 
 interface TestStep {
   name: string;
@@ -9,6 +10,38 @@ async function runBrowserChallenge() {
   console.log('=====================================================');
   console.log('CHALLENGER: Playwright Headless Browser Test Suite');
   console.log('=====================================================\n');
+
+  const PORT = 3005;
+  console.log(`Starting Next.js test server on port ${PORT}...`);
+  const nextBin = require.resolve('next/dist/bin/next');
+  const server = spawn(process.execPath, [nextBin, 'dev', '-H', '127.0.0.1', '-p', String(PORT)], {
+    cwd: process.cwd(),
+    stdio: 'inherit',
+  });
+  server.on('error', (err) => console.error('Next server spawn error:', err));
+
+  const baseUrl = `http://127.0.0.1:${PORT}`;
+
+  // Poll until server is ready
+  let serverReady = false;
+  for (let i = 0; i < 40; i++) {
+    try {
+      const res = await fetch(baseUrl);
+      if (res.status === 200) {
+        serverReady = true;
+        console.log(`Test server is ready at ${baseUrl}`);
+        break;
+      }
+    } catch {
+      // Waiting for server...
+    }
+    await new Promise((r) => setTimeout(r, 1000));
+  }
+
+  if (!serverReady) {
+    if (server.pid) process.kill(server.pid);
+    throw new Error(`Failed to start Next.js test server on ${baseUrl} within 40 seconds`);
+  }
 
   const chromePath = 'C:\\Users\\HP\\AppData\\Local\\ms-playwright\\chromium-1234\\chrome-win64\\chrome.exe';
   const browser: Browser = await chromium.launch({
@@ -38,8 +71,8 @@ async function runBrowserChallenge() {
   }
 
   try {
-    console.log('Navigating to http://localhost:3000...');
-    await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
+    console.log(`Navigating to ${baseUrl}...`);
+    await page.goto(baseUrl, { waitUntil: 'networkidle' });
 
     // Step 1: Initial State Check
     await step('1. Initial State: 0%, shy cat, no Next button', async () => {
@@ -91,10 +124,16 @@ async function runBrowserChallenge() {
       const reactionText = await page.locator('[data-testid="threshold-copy"]').textContent();
       if (!reactionText?.includes('Half? Seriously?')) throw new Error(`Expected 'Half? Seriously?', got: ${reactionText}`);
 
+      // Wait 100ms for duration-75 CSS transition to settle
+      await page.waitForTimeout(100);
+
+      const cryingClass = await page.locator('[data-testid="cat-state-crying"]').getAttribute('class');
+      if (!cryingClass?.includes('opacity-100')) throw new Error(`Expected crying class to contain opacity-100, got: ${cryingClass}`);
+
       const cryingOpacity = await page.locator('[data-testid="cat-state-crying"]').evaluate((el) => {
         return window.getComputedStyle(el).opacity;
       });
-      if (cryingOpacity !== '1') throw new Error(`Expected crying cat opacity 1, got: ${cryingOpacity}`);
+      if (parseFloat(cryingOpacity) < 0.9) throw new Error(`Expected crying cat opacity >= 0.9, got: ${cryingOpacity}`);
     });
 
     // Step 3: Mouse Drag to 55%
@@ -114,10 +153,15 @@ async function runBrowserChallenge() {
       const reactionText = await page.locator('[data-testid="threshold-copy"]').textContent();
       if (!reactionText?.includes("Aww, that's more like it!")) throw new Error(`Expected "Aww, that's more like it!", got: ${reactionText}`);
 
+      await page.waitForTimeout(100);
+
+      const confusedClass = await page.locator('[data-testid="cat-state-confused"]').getAttribute('class');
+      if (!confusedClass?.includes('opacity-100')) throw new Error(`Expected confused class to contain opacity-100, got: ${confusedClass}`);
+
       const confusedOpacity = await page.locator('[data-testid="cat-state-confused"]').evaluate((el) => {
         return window.getComputedStyle(el).opacity;
       });
-      if (confusedOpacity !== '1') throw new Error(`Expected confused cat opacity 1, got: ${confusedOpacity}`);
+      if (parseFloat(confusedOpacity) < 0.9) throw new Error(`Expected confused cat opacity >= 0.9, got: ${confusedOpacity}`);
     });
 
     // Step 4: Mouse Drag to 81%
@@ -137,10 +181,15 @@ async function runBrowserChallenge() {
       const reactionText = await page.locator('[data-testid="threshold-copy"]').textContent();
       if (!reactionText?.includes('love')) throw new Error(`Expected 'love', got: ${reactionText}`);
 
+      await page.waitForTimeout(100);
+
+      const happyClass = await page.locator('[data-testid="cat-state-happy"]').getAttribute('class');
+      if (!happyClass?.includes('opacity-100')) throw new Error(`Expected happy class to contain opacity-100, got: ${happyClass}`);
+
       const happyOpacity = await page.locator('[data-testid="cat-state-happy"]').evaluate((el) => {
         return window.getComputedStyle(el).opacity;
       });
-      if (happyOpacity !== '1') throw new Error(`Expected happy cat opacity 1, got: ${happyOpacity}`);
+      if (parseFloat(happyOpacity) < 0.9) throw new Error(`Expected happy cat opacity >= 0.9, got: ${happyOpacity}`);
     });
 
     // Step 5: Overdrive Drag to 500%
@@ -161,10 +210,15 @@ async function runBrowserChallenge() {
       const reactionText = await page.locator('[data-testid="threshold-copy"]').textContent();
       if (!reactionText?.includes('Correct answer!')) throw new Error(`Expected 'Correct answer!', got: ${reactionText}`);
 
+      await page.waitForTimeout(100);
+
+      const ecstaticClass = await page.locator('[data-testid="cat-state-ecstatic"]').getAttribute('class');
+      if (!ecstaticClass?.includes('opacity-100')) throw new Error(`Expected ecstatic class to contain opacity-100, got: ${ecstaticClass}`);
+
       const ecstaticOpacity = await page.locator('[data-testid="cat-state-ecstatic"]').evaluate((el) => {
         return window.getComputedStyle(el).opacity;
       });
-      if (ecstaticOpacity !== '1') throw new Error(`Expected ecstatic cat opacity 1, got: ${ecstaticOpacity}`);
+      if (parseFloat(ecstaticOpacity) < 0.9) throw new Error(`Expected ecstatic cat opacity >= 0.9, got: ${ecstaticOpacity}`);
 
       // Next button should now appear
       const nextBtn = page.locator('[data-testid="next-button"]');
@@ -293,9 +347,13 @@ async function runBrowserChallenge() {
     await step('10. Synchronized Hidden Range Input: set to 350 and 500', async () => {
       const hiddenInput = page.locator('[data-testid="love-slider-input"]');
 
-      // Dispatch change event to set 350
+      // Dispatch change event to set 350 using React-compatible value setter
       await hiddenInput.evaluate((el: HTMLInputElement) => {
-        el.value = '350';
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+          window.HTMLInputElement.prototype,
+          'value'
+        )?.set;
+        nativeInputValueSetter?.call(el, '350');
         el.dispatchEvent(new Event('change', { bubbles: true }));
       });
 
@@ -304,7 +362,11 @@ async function runBrowserChallenge() {
 
       // Set to 500
       await hiddenInput.evaluate((el: HTMLInputElement) => {
-        el.value = '500';
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+          window.HTMLInputElement.prototype,
+          'value'
+        )?.set;
+        nativeInputValueSetter?.call(el, '500');
         el.dispatchEvent(new Event('change', { bubbles: true }));
       });
 
@@ -316,15 +378,29 @@ async function runBrowserChallenge() {
     await step('11. Navigation: Clicking Next button transitions to /hub', async () => {
       const nextBtn = page.locator('[data-testid="next-button"]');
       await nextBtn.click();
-      await page.waitForURL('**/hub', { timeout: 4000 });
+      await page.waitForURL('**/hub', { timeout: 15000 });
 
       const currentUrl = page.url();
       if (!currentUrl.endsWith('/hub')) throw new Error(`Expected URL to end with /hub, got: ${currentUrl}`);
-      console.log(`   Successfully navigated to: ${currentUrl}`);
+      
+      const hubHeading = page.locator('[data-testid="hub-heading"]');
+      await hubHeading.waitFor({ state: 'visible', timeout: 5000 });
+      const headingText = await hubHeading.textContent();
+      if (!headingText?.includes('You passed the love test')) {
+        throw new Error(`Unexpected hub heading: ${headingText}`);
+      }
+      console.log(`   Successfully navigated to: ${currentUrl} with heading: "${headingText}"`);
     });
 
   } finally {
-    await browser.close();
+    try {
+      await browser.close();
+    } catch {}
+    if (server.pid) {
+      try {
+        process.kill(server.pid);
+      } catch {}
+    }
   }
 
   console.log('\n=====================================================');
