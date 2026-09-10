@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-pastel-pink: #FDE8EB;
+  --text-deep-crimson: #6B1A3A;
+  --crimson-border: #6B1A3A;
+  --soft-blue: #BFDBFE;
+  --ribbon-pink: #F472B6;
+  --font-heading: var(--font-fredoka), 'Segoe UI Rounded', 'Comfortaa', 'Quicksand', sans-serif;
+  --font-script: var(--font-dancing-script), 'Brush Script MT', 'Caveat', cursive;
+}
+
+body {
+  background-color: var(--bg-pastel-pink);
+  color: var(--text-deep-crimson);
+  font-family: var(--font-heading);
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom Typography Helpers */
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-script,
+.font-cursive {
+  font-family: var(--font-script);
+}
+
+/* Lined Paper Texture for Surprise 3 Letter */
+.lined-paper {
+  background-color: #FFFFFF;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 31px,
+    rgba(244, 114, 182, 0.22) 31px,
+    rgba(244, 114, 182, 0.22) 32px
+  );
+  line-height: 32px;
+}
+
+/* Scalloped Decorative Frame for Surprise 1 Bouquet */
+.scalloped-frame {
+  border: 2px dashed #6B1A3A;
+  border-radius: 2rem;
+  box-shadow: 0 0 0 6px #FDE8EB, 0 0 0 8px rgba(107, 26, 58, 0.2);
+}
+
+/* Pill Button Base */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 2rem;
+  border: 1.5px solid #6B1A3A;
+  background-color: transparent;
+  color: #6B1A3A;
+  border-radius: 9999px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-pill:hover {
+  background-color: #6B1A3A;
+  color: #FFFFFF;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 4px 12px rgba(107, 26, 58, 0.15);
+}
+
+.btn-pill:active {
+  transform: translateY(0) scale(0.98);
+}
