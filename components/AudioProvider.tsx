@@ -36,13 +36,6 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const trackTitle = 'BIRDS OF A FEATHER';
   const artist = 'Billie Eilish / Purrple Cat';
 
-  // Initialize synth instance
-  useEffect(() => {
-    synthRef.current = new RomanticSynth();
-    return () => {
-      synthRef.current?.stop();
-    };
-  }, []);
 
   const handleAudioError = useCallback(() => {
     console.info('Audio asset unavailable or blocked; activating RomanticSynth fallback.');
@@ -134,6 +127,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         src="/audio/romantic_melody.mp3"
         preload="metadata"
         loop
+        autoPlay
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onTimeUpdate={handleTimeUpdate}

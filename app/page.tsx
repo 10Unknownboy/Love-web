@@ -158,6 +158,10 @@ export default function HomePage() {
           </div>
         )}
       </div>
+
+      <div className="mt-1 text-xs font-cursive text-[#8B264E]/60 tracking-wide">
+          - Made by Manglesh ks...
+      </div>
     </div>
   );
 }
