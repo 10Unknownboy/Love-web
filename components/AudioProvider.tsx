@@ -36,6 +36,13 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const trackTitle = 'BIRDS OF A FEATHER';
   const artist = 'Billie Eilish / Purrple Cat';
 
+  // Initialize synth instance
+  useEffect(() => {
+    synthRef.current = new RomanticSynth();
+    return () => {
+      synthRef.current?.stop();
+    };
+  }, []);
 
   const handleAudioError = useCallback(() => {
     console.info('Audio asset unavailable or blocked; activating RomanticSynth fallback.');
@@ -57,6 +64,13 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         await audioRef.current.play();
         setIsPlaying(true);
       } catch (err) {
+        const errorName = err instanceof DOMException ? err.name : '';
+        if (errorName === 'NotAllowedError' || errorName === 'AbortError') {
+          console.info('Audio autoplay was blocked; waiting for user interaction.');
+          setIsPlaying(false);
+          return;
+        }
+
         console.warn('Audio play failed; switching to RomanticSynth fallback:', err);
         setIsUsingSynth(true);
         synthRef.current?.start((t) => setCurrentTime(t));
@@ -81,6 +95,10 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       await play();
     }
   }, [isPlaying, pause, play]);
+
+  useEffect(() => {
+    void play();
+  }, [play]);
 
   const seek = useCallback(
     (seconds: number) => {
@@ -125,7 +143,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       <audio
         ref={audioRef}
         src="/audio/romantic_melody.mp3"
-        preload="metadata"
+        preload="auto"
         loop
         autoPlay
         onPlay={() => setIsPlaying(true)}
