@@ -20,6 +20,9 @@ const dancingScript = Dancing_Script({
 export const metadata: Metadata = {
   title: 'How much do you love me? 💕 | Romantic Love Test',
   description: 'An interactive romantic digital gift card with surprises, roses, music, and a heartfelt letter.',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export const viewport: Viewport = {
