@@ -81,13 +81,13 @@ export function AudioPlayerWidget({ className = '' }: { className?: string }) {
               data-testid="audio-track-title"
               className="text-lg sm:text-xl font-bold font-heading text-[#6B1A3A] tracking-tight leading-tight mt-0.5"
             >
-              {trackTitle || 'BIRDS OF A FEATHER'}
+              {trackTitle || 'Achha Ji Main Haari Chalo'}
             </h3>
             <p
               data-testid="audio-artist-name"
               className="text-xs sm:text-sm font-cursive text-[#8B264E]"
             >
-              {artist || 'Billie Eilish'}
+              {artist || 'Asha Bhosle & Mohammed Rafi'}
             </p>
           </div>
         </div>

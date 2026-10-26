@@ -300,12 +300,12 @@ async function runChallengerTests() {
     const hasPlayPauseBtn = (await playPauseBtn.count()) > 0;
     const hasSeekSlider = (await page.locator('[data-testid="audio-seek-slider"]').count()) > 0;
 
-    const trackTitleMatches = trackTitle.includes('BIRDS OF A FEATHER');
-    const artistMatches = artistName.includes('Billie Eilish');
+    const trackTitleMatches = trackTitle.includes('Achha Ji Main Haari Chalo');
+    const artistMatches = artistName.includes('Asha Bhosle') && artistName.includes('Mohammed Rafi');
     const audioPlayerPass = audioWidgetCount > 0 && trackTitleMatches && artistMatches && hasPlayPauseBtn && hasSeekSlider;
 
     testResults.surprise2Route.details.push({
-      item: 'Audio Player Widget with BIRDS OF A FEATHER by Billie Eilish',
+      item: 'Audio Player Widget with Achha Ji Main Haari Chalo by Asha Bhosle & Mohammed Rafi',
       audioWidgetCount,
       trackTitle,
       artistName,

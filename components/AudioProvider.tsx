@@ -33,8 +33,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const synthRef = useRef<RomanticSynth | null>(null);
 
-  const trackTitle = 'BIRDS OF A FEATHER';
-  const artist = 'Billie Eilish / Purrple Cat';
+  const trackTitle = 'Achha Ji Main Haari Chalo';
+  const artist = 'Asha Bhosle & Mohammed Rafi';
 
   // Initialize synth instance
   useEffect(() => {
@@ -142,7 +142,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       {/* Hidden persistent HTML5 audio tag */}
       <audio
         ref={audioRef}
-        src="/audio/romantic_melody.mp3"
+        src="/audio/song.mp3"
         preload="auto"
         loop
         autoPlay
