@@ -16,16 +16,16 @@ export interface LetterCardProps {
 }
 
 export const DEFAULT_LETTER_PARAGRAPHS = [
-  "You make my life feel more beautiful and meaningful, and I feel so lucky to have you. I love you wholeheartedly, and I can't wait to continue loving you for the rest of my life.",
-  "You make me smile, you make me feel safe, and you bring so much happiness into my world. I know I tell you this every day, but you truly are the most beautiful person in my eyes.",
-  "Thank you for being you and for filling my heart with so much love. No matter what happens, I will always choose you.",
+  'Heyyy !!',
+  'This was the message from where it all started. You were just a dream for me, but now I can see my entire universe in you—as if it were something from a past life, as if we were lovers before. The bond and love we share are so immense that I could just lie in your lap and happily live the rest of my life 🤧',
+  "I want you to never be sad with me. I am not perfect, and I never claim to be, because against you, I am nothing! I'm not the most charming, the best-looking, or the best human being, but what I have for you is pure and sheer eternal love. I love you in the most innocent way possible! 💖🫶",
 ];
 
-export const DEFAULT_LETTER_CLOSING = 'Always, forever.';
+export const DEFAULT_LETTER_CLOSING = 'Will you forgive me, my jaaann? 🥺';
 
 export function LetterCard({
   recipient = 'To My Beloved 💕',
-  subHeader = 'Forever & Always',
+  subHeader = 'A message from where it all started',
   paragraphs = DEFAULT_LETTER_PARAGRAPHS,
   closing = DEFAULT_LETTER_CLOSING,
   signature,
@@ -70,7 +70,11 @@ export function LetterCard({
             <p
               key={idx}
               data-testid={`letter-paragraph-${idx}`}
-              className="font-cursive text-xl sm:text-2xl text-[#6B1A3A] leading-[32px] tracking-wide select-text"
+              className={`font-cursive ${
+                idx === 0
+                  ? 'font-bold text-2xl sm:text-3xl text-[#8B264E]'
+                  : 'text-xl sm:text-2xl text-[#6B1A3A]'
+              } leading-[32px] tracking-wide select-text`}
             >
               {paragraph}
             </p>

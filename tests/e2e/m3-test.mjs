@@ -194,10 +194,10 @@ async function runM3Verification() {
     results.surprise3 = {
       headingCorrect: letterHeading === 'A Letter From My Heart',
       hasLetterCard,
-      p0Matches: p0.includes('You make my life feel more beautiful'),
-      p1Matches: p1.includes('You make me smile, you make me feel safe'),
-      p2Matches: p2.includes('Thank you for being you and for filling my heart with so much love'),
-      closingMatches: closing === 'Always, forever.',
+      p0Matches: p0.includes('Heyyy !!'),
+      p1Matches: p1.includes('This was the message from where it all started'),
+      p2Matches: p2.includes('I want you to never be sad with me'),
+      closingMatches: closing === 'Will you forgive me, my jaaann? 🥺',
       hasCatImage,
       nextLinksToHub: nextBtn3Href === '/hub',
     };

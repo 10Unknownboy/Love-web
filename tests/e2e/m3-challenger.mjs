@@ -381,12 +381,11 @@ async function runChallengerTests() {
     const p1 = (await page.locator('[data-testid="letter-paragraph-1"]').innerText()).trim();
     const p2 = (await page.locator('[data-testid="letter-paragraph-2"]').innerText()).trim();
 
-    const expectedP0 =
-      "You make my life feel more beautiful and meaningful, and I feel so lucky to have you. I love you wholeheartedly, and I can't wait to continue loving you for the rest of my life.";
+    const expectedP0 = 'Heyyy !!';
     const expectedP1 =
-      "You make me smile, you make me feel safe, and you bring so much happiness into my world. I know I tell you this every day, but you truly are the most beautiful person in my eyes.";
+      'This was the message from where it all started. You were just a dream for me, but now I can see my entire universe in you—as if it were something from a past life, as if we were lovers before. The bond and love we share are so immense that I could just lie in your lap and happily live the rest of my life 🤧';
     const expectedP2 =
-      "Thank you for being you and for filling my heart with so much love. No matter what happens, I will always choose you.";
+      "I want you to never be sad with me. I am not perfect, and I never claim to be, because against you, I am nothing! I'm not the most charming, the best-looking, or the best human being, but what I have for you is pure and sheer eternal love. I love you in the most innocent way possible! 💖🫶";
 
     const p0Pass = p0 === expectedP0;
     const p1Pass = p1 === expectedP1;
@@ -414,15 +413,15 @@ async function runChallengerTests() {
     console.log(`  Paragraph 2 Match: ${p1Pass ? 'PASS' : 'FAIL'}`);
     console.log(`  Paragraph 3 Match: ${p2Pass ? 'PASS' : 'FAIL'}`);
 
-    // Closing "Always, forever."
+    // Forgiveness question closing.
     const closing = (await page.locator('[data-testid="letter-closing"]').innerText()).trim();
-    const closingPass = closing === 'Always, forever.';
+    const closingPass = closing === 'Will you forgive me, my jaaann? 🥺';
     testResults.surprise3Route.details.push({
-      item: 'Closing "Always, forever."',
+      item: 'Forgiveness question closing',
       actual: closing,
       passed: closingPass,
     });
-    console.log(`  Closing "Always, forever.": ${closingPass ? 'PASS' : 'FAIL'}`);
+    console.log(`  Forgiveness question closing: ${closingPass ? 'PASS' : 'FAIL'}`);
 
     // Cat holding heart
     const catSection = page.locator('[data-testid="letter-cat"]');
