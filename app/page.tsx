@@ -7,10 +7,12 @@ import confetti from 'canvas-confetti';
 import { LoveSlider } from '@/components/LoveSlider';
 import { LoveGauge } from '@/components/LoveGauge';
 import { CatDisplay, getCatThresholdConfig } from '@/components/CatDisplay';
+import { useAudio } from '@/components/AudioProvider';
 
 export default function HomePage() {
   const [loveValue, setLoveValue] = useState<number>(0);
   const [isUnlocked, setIsUnlocked] = useState<boolean>(false);
+  const { isPlaying, play } = useAudio();
 
   // Trigger celebration and latch unlock state
   const handleUnlock = useCallback(() => {
@@ -32,12 +34,15 @@ export default function HomePage() {
   // Slider change handler with threshold latching
   const handleSliderChange = useCallback(
     (val: number) => {
+      if (!isPlaying) {
+        void play();
+      }
       setLoveValue(val);
       if (val >= 200 && !isUnlocked) {
         handleUnlock();
       }
     },
-    [isUnlocked, handleUnlock]
+    [isPlaying, play, isUnlocked, handleUnlock]
   );
 
   // Retrieve threshold configuration for copy and emotional state
